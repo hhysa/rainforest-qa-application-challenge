@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fixed App for Rainforest QA Application</title>
+  </head>
+  <body>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      window.onload = function () {
+        sendRequest();
+      };
+      let BASE_URL = "https://www.letsrevolutionizetesting.com/challenge";
+      async function sendRequest() {
+        //the main error was about the header, I changed it to accept json.
+        const headers = {
+          Accept: "application/json",
+        };
+        try {
+          const response = await axios({
+            method: "get",
+            url: BASE_URL,
+            headers: headers,
+          });
+
+          // response handle in case that it is not the end 
+         
+          if(response && response.data && response.data.message == 'This is not the end'){
+           //the second error consisted in the repetition of the same URL
+           //each time I sent the request it always responded with the same data except for the ID
+           //so I kept sending the same request until I got the end result
+           BASE_URL = response.data.follow;
+           sendRequest();
+          }
+          else(
+            console.log('You reached the end', response)
+          )
+        } catch (error) {
+          //error handling
+          console.error("Error:", error.message);
+        }
+      }
+    </script>
+  </body>
+</html>
